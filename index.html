@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prince of Prints</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>Prince of Prints</h1>
+    <p class="tagline">Fast blueprint browsing • Keyboard-ready • Zero setup</p>
+  </header>
+
+  <main class="container">
+    <section class="controls">
+      <div class="control">
+        <label for="category-select">Category</label>
+        <select id="category-select"></select>
+      </div>
+      <div class="control">
+        <label for="sheet-select">Sheet</label>
+        <select id="sheet-select"></select>
+      </div>
+      <div class="control grow">
+        <label for="filter-input">Filter (type to narrow)</label>
+        <input id="filter-input" type="text" placeholder="e.g. B-232, ref-E8, detail, C-12">
+      </div>
+      <div class="control buttons">
+        <button id="prev-btn" title="Previous (←)">Prev</button>
+        <button id="next-btn" title="Next (→)">Next</button>
+      </div>
+    </section>
+
+    <section class="viewer">
+      <div id="image-wrapper">
+        <img id="image" alt="Blueprint page">
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <span id="status-text">Ready.</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
