@@ -1,242 +1,132 @@
+'use strict';
 
-const categorySelect = document.getElementById('category-select');
-const sheetSelect = document.getElementById('sheet-select');
-const imageEl = document.getElementById('image');
-const prevBtn = document.getElementById('prev-btn');
-const nextBtn = document.getElementById('next-btn');
-const filterInput = document.getElementById('filter-input');
-const statusText = document.getElementById('status-text');
-
-let data = {};
-let filteredList = [];
-let currentIndex = 0;
-
-async function loadData() {
-  setStatus('Loading sections-index.json...');
-  try {
-    const res = await fetch('sections-index.json');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    data = await res.json();
-    initCategories();
-    setStatus('Ready.');
-  } catch (err) {
-    setStatus('Failed to load sections-index.json');
-    console.error(err);
-  }
-}
-
-function initCategories() {
-  categorySelect.innerHTML = '';
-  const categories = Object.keys(data);
-  for (const cat of categories) {
-    const opt = document.createElement('option');
-    opt.value = cat;
-    opt.textContent = cat;
-    categorySelect.appendChild(opt);
-  }
-  if (categories.length) {
-    updateSheets();
-  }
-}
-
-function updateSheets() {
-  const cat = categorySelect.value;
-  const all = (data[cat] || []).slice(); // copy
-  applyFilterAndPopulate(all);
-}
-
-function applyFilterAndPopulate(list) {
-  const q = filterInput.value.trim().toLowerCase();
-  let result = list;
-  if (q) {
-    result = list.filter(item =>
-      item.name.toLowerCase().includes(q) || item.path.toLowerCase().includes(q)
-    );
-  }
-  filteredList = result;
-  sheetSelect.innerHTML = '';
-  filteredList.forEach((item, idx) => {
-    const opt = document.createElement('option');
-    opt.value = String(idx);
-    opt.textContent = item.name;
-    sheetSelect.appendChild(opt);
-  });
-  currentIndex = 0;
-  if (filteredList.length) {
-    sheetSelect.value = '0';
-    showCurrent();
-  } else {
-    imageEl.removeAttribute('src');
-    setStatus('No matches.');
-  }
-}
-
-function showCurrent() {
-  if (!filteredList.length) return;
-  const item = filteredList[currentIndex];
-  imageEl.src = item.path;
-  imageEl.alt = item.name;
-  sheetSelect.value = String(currentIndex);
-  setStatus(`${item.name} (${currentIndex + 1}/${filteredList.length})`);
-}
-
-function next() {
-  if (!filteredList.length) return;
-  currentIndex = (currentIndex + 1) % filteredList.length;
-  showCurrent();
-}
-
-function prev() {
-  if (!filteredList.length) return;
-  currentIndex = (currentIndex - 1 + filteredList.length) % filteredList.length;
-  showCurrent();
-}
-
-categorySelect.addEventListener('change', updateSheets);
-sheetSelect.addEventListener('change', () => {
-  currentIndex = Number(sheetSelect.value) || 0;
-  showCurrent();
-});
-filterInput.addEventListener('input', updateSheets);
-nextBtn.addEventListener('click', next);
-prevBtn.addEventListener('click', prev);
-
-// Keyboard navigation
-window.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowRight') next();
-  if (e.key === 'ArrowLeft') prev();
-});
+// === Elements ===
+const els = {
+  jobInput: document.getElementById('job-input'),
+  categorySelect: document.getElementById('category-select'),
+  sheetSelect: document.getElementById('sheet-select'),
+  filterInput: document.getElementById('filter-input'),
+  image: document.getElementById('image'),
+  status: document.getElementById('status-text'),
+};
 
 function setStatus(msg) {
-  statusText.textContent = msg;
+  if (els.status) els.status.textContent = msg;
+  console.log('[STATUS]', msg);
 }
 
-loadData();
-// ----- Touch: swipe (next/prev) + pinch-to-zoom + pan -----
-(() => {
-  const area = document.getElementById('image-wrapper');
-  const img = document.getElementById('image');
+// ---------- Optional registry (maps job id -> folder paths) ----------
+async function ensureJobsRegistry() {
+  try {
+    const r = await fetch('jobs/jobs.json', { cache: 'no-store' });
+    if (!r.ok) throw 0;
+    const data = await r.json();
+    window.jobsRegistry = (data && data.jobs) || [];
+  } catch {
+    window.jobsRegistry = [];
+  }
+}
+function normalizeJobPath(p) {
+  return 'jobs/' + String(p || '').replace(/^(\.\/|\/)+/, '');
+}
 
-  // Transform state
-  let scale = 1, minScale = 1, maxScale = 6;
-  let tx = 0, ty = 0;
-  let lastTap = 0;
-
-  // Active pointers
-  const pts = new Map();
-
-  function applyTransform() {
-    img.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-    img.style.transformOrigin = 'center center';
-    img.style.willChange = 'transform';
+// ---------- Build currentJob from typed job number ----------
+async function applyAccessCode() {
+  const accessCode = (els.jobInput?.value || '').trim();
+  if (!accessCode) {
+    window.currentJob = null;
+    setStatus('No access code entered.');
+    return;
   }
 
-  // Helpers for pinch
-  function dist([a,b]) {
-    const dx = a.clientX - b.clientX, dy = a.clientY - b.clientY;
-    return Math.hypot(dx, dy);
+  // make sure the registry is loaded (if you’re using jobs/jobs.json)
+  if (!Array.isArray(window.jobsRegistry)) await ensureJobsRegistry();
+
+  const lower = accessCode.toLowerCase();
+  const entry = (window.jobsRegistry || []).find(j =>
+    String(j.id || '').toLowerCase() === lower ||
+    String(j.label || '').toLowerCase() === lower
+  );
+
+  if (entry) {
+    window.currentJob = {
+      id: entry.id || accessCode,
+      label: entry.label || accessCode,
+      indexUrl: normalizeJobPath(entry.index || `${accessCode}/index/assets-index.json`),
+      imagesDir: normalizeJobPath(entry.imagesDir || `${accessCode}/images/`),
+      thumbsDir: normalizeJobPath(entry.thumbsDir || `${accessCode}/thumbs/`),
+    };
+  } else {
+    // fallback: folder name == access code
+    window.currentJob = {
+      id: accessCode,
+      label: accessCode,
+      indexUrl: `jobs/${accessCode}/index/assets-index.json`,
+      imagesDir: `jobs/${accessCode}/images/`,
+      thumbsDir: `jobs/${accessCode}/thumbs/`,
+    };
   }
-  function center([a,b]) {
-    return { x: (a.clientX + b.clientX)/2, y: (a.clientY + b.clientY)/2 };
-  }
 
-  // Clamp pan so you can’t fling the image off-screen entirely
-  function clampPan() {
-    const rect = area.getBoundingClientRect();
-    const iw = img.naturalWidth || img.width;
-    const ih = img.naturalHeight || img.height;
+  setStatus(`Access code set: ${window.currentJob.id}`);
+}
 
-    // Rough visible size after scale (contain)
-    const vw = rect.width, vh = rect.height;
-    const maxX = Math.max(0, (iw*scale - vw) / 2) + 40; // a little slack
-    const maxY = Math.max(0, (ih*scale - vh) / 2) + 40;
 
-    tx = Math.min(maxX, Math.max(-maxX, tx));
-    ty = Math.min(maxY, Math.max(-maxY, ty));
-  }
+// ---------- Index helpers ----------
+function groupArrayIndexByCategory(items) {
+  const groups = {};
+  for (const it of items) {
+    const raw = (it.path || '').replace(/^\.\//, '');
+    const segs = raw.split('/');
 
-  // Swipe detection (when scale is ~1)
-  let swipeStartX = null, swipeStartY = null, swipeStartTime = 0;
-
-  area.addEventListener('pointerdown', (e) => {
-    area.setPointerCapture(e.pointerId);
-    pts.set(e.pointerId, e);
-    if (pts.size === 1) {
-      swipeStartX = e.clientX; swipeStartY = e.clientY; swipeStartTime = Date.now();
+    let cat = 'All';
+    const iImages = segs.findIndex(s => s.toLowerCase() === 'images');
+    if (iImages !== -1 && segs[iImages + 1]) {
+      if (segs.length > iImages + 2) cat = segs[iImages + 1];
+    } else if (segs[0] === 'assets' && segs[1] && segs.length > 2) {
+      cat = segs[1];
     }
-  });
 
-  area.addEventListener('pointermove', (e) => {
-    if (!pts.has(e.pointerId)) return;
-    pts.set(e.pointerId, e);
-
-    const arr = [...pts.values()];
-    if (arr.length === 2) {
-      // Pinch zoom
-      const dNow = dist(arr);
-      const cNow = center(arr);
-
-      if (!area._pinchRef) {
-        area._pinchRef = { d0: dNow, scale0: scale, c0: cNow, tx0: tx, ty0: ty };
-        return;
-      }
-      const { d0, scale0, c0, tx0, ty0 } = area._pinchRef;
-      const factor = dNow / (d0 || 1);
-      scale = Math.min(maxScale, Math.max(minScale, scale0 * factor));
-
-      // Pan relative to pinch center
-      tx = tx0 + (cNow.x - c0.x);
-      ty = ty0 + (cNow.y - c0.y);
-      clampPan();
-      applyTransform();
-    } else if (arr.length === 1 && scale > 1.01) {
-      // Drag/pan when zoomed
-      const p = arr[0];
-      if (!area._dragRef) {
-        area._dragRef = { x0: p.clientX, y0: p.clientY, tx0: tx, ty0: ty };
-        return;
-      }
-      const { x0, y0, tx0, ty0 } = area._dragRef;
-      tx = tx0 + (p.clientX - x0);
-      ty = ty0 + (p.clientY - y0);
-      clampPan();
-      applyTransform();
-    }
-  });
-
-  area.addEventListener('pointerup', (e) => {
-    area.releasePointerCapture(e.pointerId);
-    pts.delete(e.pointerId);
-    area._pinchRef = null;
-    area._dragRef = null;
-
-    // Swipe only if not zoomed in
-    if (scale <= 1.02 && swipeStartX != null) {
-      const dx = e.clientX - swipeStartX;
-      const dy = e.clientY - swipeStartY;
-      const dt = Date.now() - swipeStartTime;
-      const isSwipe = dt < 500 && Math.abs(dx) > 60 && Math.abs(dy) < 80;
-      if (isSwipe) {
-        if (dx < 0) next(); else prev();
-      }
-    }
-    swipeStartX = swipeStartY = null;
-  });
-
-  // Double-tap to reset
-  area.addEventListener('pointerdown', (e) => {
-    const now = Date.now();
-    if (now - lastTap < 300) {
-      scale = 1; tx = 0; ty = 0; applyTransform();
-    }
-    lastTap = now;
-  });
-
-  // When image changes, reset transform
-  const _showCurrent = showCurrent;
-  showCurrent = function() {
-    scale = 1; tx = 0; ty = 0;
-    _showCurrent();
-    applyTransform();
+    (groups[cat] ||= []).push({
+      name: it.name || it.label || segs[segs.length - 1] || 'item',
+      label: it.label || it.name,
+      path: it.path,
+    });
   }
-})();
+
+  // collapse to All if almost all are singletons
+  let total = 0, singles = 0;
+  for (const k of Object.keys(groups)) {
+    const len = groups[k].length;
+    total += len;
+    if (len === 1) singles++;
+  }
+  if (singles >= total * 0.9) {
+    const all = [];
+    for (const k of Object.keys(groups)) all.push(...groups[k]);
+    return { All: all };
+  }
+  return groups;
+}
+
+function normalizeIndex(raw) {
+  return Array.isArray(raw) ? groupArrayIndexByCategory(raw) : raw;
+}
+
+function makeOptions(list, firstLabel = 'Select...') {
+  const opts = [`<option value="">${firstLabel}</option>`];
+  for (const item of list) {
+    if (typeof item === 'string') {
+      opts.push(`<option value="${item}">${item}</option>`);
+    } else if (item && typeof item === 'object') {
+      opts.push(`<option value="${item.value || item.name || item.label}">${item.label || item.name || item.value}</option>`);
+    }
+  }
+  return opts.join('\n');
+}
+
+// expose key functions globally
+window.setStatus = setStatus;
+window.applyAccessCode = applyAccessCode;
+window.loadIndexForCurrentJob = typeof loadIndexForCurrentJob !== 'undefined' ? loadIndexForCurrentJob : undefined;
+window.onCategoryChange = typeof onCategoryChange !== 'undefined' ? onCategoryChange : undefined; // (optional, handy)
+window.applyJobNumber = applyAccessCode;  // alias so Enter/Change handlers work

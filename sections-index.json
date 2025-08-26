@@ -1640,8 +1640,248 @@
                           "name":  "C-394.png",
                           "path":  "./assets/columns=C/C-394.png"
                       }
-                  ],
-    "Beams=B":  [
+                    ],
+  "Column-Details":  
+                 [ 
+                      {  "name":  "C-229-d1.png",
+                         "path":  "./assets/Column-Details/C-229-d1.png"},   
+                      { "name":  "C-229-d2.png",
+                         "path":  "./assets/Column-Details/C-229-d2.png"},
+                    {
+                              "name":  "C-230-d1.png",
+                              "path":  "./assets/Column-Details/C-230-d1.png"
+                },
+                 {
+                              "name":  "C-230-d2.png",
+                              "path":  "./assets/Column-Details/C-230-d2.png"
+                     },
+                          {
+                              "name":  "C-230-d3.png",
+                              "path":  "./assets/Column-Details/C-230-d3.png"
+                          },
+                          {
+                              "name":  "C-230-d4.png",
+                              "path":  "./assets/Column-Details/C-230-d4.png"
+                          },
+                          {
+                              "name":  "C-231-d1.png",
+                              "path":  "./assets/Column-Details/C-231-d1.png"
+                          },
+                          {
+                              "name":  "CC-231-d2.png",
+                              "path":  "./assets/Column-Details/C-231-d2.png"
+                          },
+                          {
+                              "name":  "C-231-d3.png",
+                              "path":  "./assets/Column-Details/C-231-d3.png"
+                          },
+                          {
+                              "name":  "C-231-d4.png",
+                              "path":  "./assets/Column-Details/C-231-d4.png"
+                          },
+                          {
+                              "name":  "C-232-d1.png",
+                              "path":  "./assets/Column-Details/C-232-d1.png"
+                          },
+                          {
+                                "name":  "C-232-d2.png",
+                                "path":  "./assets/Column-Details/C-232-d2.png"
+                            },
+                            {
+                                "name":  "C-232-d3.png",
+                                "path":  "./assets/Column-Details/C-232-d3.png"
+                            },
+                            {
+                                "name":  "C-232-d4.png",
+                                "path":  "./assets/Column-Details/C-232-d4.png"
+                            },
+                            {
+                                "name":  "C-233-d1.png",
+                                "path":  "./assets/Column-Details/C-233-d1.png"
+                            },
+                            {
+                                "name":  "C-233-d2.png",
+                                "path":  "./assets/Column-Details/C-233-d2.png"
+                            },
+                            {
+                                "name":  "C-233-d3.png",
+                                "path":  "./assets/Column-Details/C-233-d3.png"
+                            },
+                            {
+                                "name":  "C-233-d4.png",
+                                "path":  "./assets/Column-Details/C-233-d4.png"
+                            },
+                            {
+                                "name":  "C-234-d1.png",
+                                "path":  "./assets/Column-Details/C-234-d1.png"
+                            },
+                            {
+                                "name":  "C-234-d2.png",
+                                "path":  "./assets/Column-Details/C-234-d2.png"
+                            },
+                            {
+                                "name":  "C-234-d3.png",
+                                "path":  "./assets/Column-Details/C-234-d3.png"
+                            },
+                            {
+                                "name":  "C-234-d4.png",
+                                "path":  "./assets/Column-Details/C-234-d4.png"
+                            },
+                            {
+                                "name":  "C-235-d1.png",
+                                "path":  "./assets/Column-Details/C-235-d1.png"
+                            },
+                            {
+                                "name":  "C-235-d2.png",
+                                "path":  "./assets/Column-Details/C-235-d2.png"
+                            },
+                            {
+                                "name":  "C-235-d3.png",
+                                "path":  "./assets/Column-Details/C-235-d3.png"
+                            },
+                            {
+                                "name":  "C-235-d4.png",
+                                "path":  "./assets/Column-Details/C-235-d4.png"
+                            },
+                            {
+                                "name":  "C-236-d1.png",
+                                "path":  "./assets/Column-Details/C-236-d1.png"
+                            },
+                            {
+                                "name":  "C-236-d2.png",
+                                "path":  "./assets/Column-Details/C-236-d2.png"
+                            },
+                            {
+                                "name":  "C-236-d3.png",
+                                "path":  "./assets/Column-Details/C-236-d3.png"
+                            },
+                            {
+                                "name":  "C-236-d4.png",
+                                "path":  "./assets/Column-Details/C-236-d4.png"
+                            },
+                            {
+                                "name":  "C-237-d1.png",
+                                "path":  "./assets/Column-Details/C-237-d1.png"
+                            },
+                            {
+                                "name":  "C-237-d2.png",
+                                "path":  "./assets/Column-Details/C-237-d2.png"
+                            },
+                            {
+                                "name":  "C-237-d3.png",
+                                "path":  "./assets/Column-Details/C-237-d3.png"
+                            },
+                            {
+                                "name":  "C-237-d4.png",
+                                "path":  "./assets/Column-Details/C-238-d4.png"  
+                          },
+                            {
+                                    "name":  "C-238-d1.png",
+                                    "path":  "./assets/Column-Details/C-238-d1.png"
+                                },
+                                {
+                                    "name":  "C-238-d2.png",
+                                    "path":  "./assets/Column-Details/C-238-d2.png"
+                                },
+                                {
+                                    "name":  "C-238-d3.png",
+                                    "path":  "./assets/Column-Details/C-238-d3.png"
+                                }, 
+                                {
+                                    "name":  "C-238-d4.png",
+                                    "path":  "./assets/Column-Details/C-238-d4.png"
+                                },
+                                {
+                                    "name":  "C-239-d1.png",
+                                    "path":  "./assets/Column-Details/C-239-d1.png"
+                                },
+                                {
+                                    "name":  "C-239-d2.png",
+                                    "path":  "./assets/Column-Details/C-239-d2.png"
+                                },
+                                {
+                                    "name":  "C-239-d3.png",
+                                    "path":  "./assets/Column-Details/C-239-d3.png"
+                                },
+                                {
+                                    "name":  "C-239-d4.png",
+                                    "path":  "./assets/Column-Details/C-239-d4.png"
+                                },
+                                {
+                                    "name":  "C-239-d5.png",
+                                    "path":  "./assets/Column-Details/C-239-d5.png"
+                                },
+                                {
+                                    "name":  "C-239-d6.png",
+                                    "path":  "./assets/Column-Details/C-239-d6.png"
+                                },
+                                {
+                                    "name":  "C-392-d1.png",
+                                    "path":  "./assets/Column-Details/C-392-d1.png"
+                                },
+                                {
+                                    "name":  "C-392-d2.png",
+                                    "path":  "./assets/Column-Details/C-392-d2.png"
+                                },
+                                {
+                                    "name":  "C-392-d3.png",
+                                    "path":  "./assets/Column-Details/C-392-d3.png"
+                                },
+                                {
+                                    "name":  "C-392-d4.png",
+                                    "path":  "./assets/Column-Details/C-392-d4.png"
+                                },
+                                {
+                                    "name":  "C-393-d1.png",
+                                    "path":  "./assets/Column-Details/C-393-d1.png"
+                                },
+                                {
+                                    "name":  "C-393-d2.png",
+                                    "path":  "./assets/Column-Details/C-393-d2.png"
+                                },
+                                {
+                                    "name":  "C-393-d3.png",
+                                    "path":  "./assets/Column-Details/C-393-d3.png"
+                                },
+                                {
+                                    "name":  "C-393-d4.png",
+                                    "path":  "./assets/Column-Details/C-393-d4.png"
+                                },
+                                {
+                                    "name":  "C-394-d1.png",
+                                    "path":  "./assets/Column-Details/C-394-d1.png"
+                                },
+                                {
+                                    "name":  "C-394-d2.png",
+                                    "path":  "./assets/Column-Details/C-394-d2.png"
+                                },
+                                {
+                                    "name":  "C-394-d3.png",
+                                    "path":  "./assets/Column-Details/C-394-d3.png"
+                                },
+                                {
+                                    "name":  "C-394-d4.png",
+                                    "path":  "./assets/Column-Details/C-394-d4.png"                                       
+                                },
+                                {
+                                    "name":  "C-395-d1.png",
+                                    "path":  "./assets/Column-Details/C-395-d1.png"
+                                },
+                                {
+                                    "name":  "C-395-d2.png",
+                                    "path":  "./assets/Column-Details/C-395-d2.png"
+                                },
+                                {
+                                    "name":  "C-395-d3.png",
+                                    "path":  "./assets/Column-Details/C-395-d3.png"
+                                },
+                                {
+                                    "name":  "C-395-d4.png",
+                                    "path":  "./assets/Column-Details/C-395-d4.png"
+                                }
+                            ],
+    "Beams=B":  
+                        [
                     {
                         "name":  "B-120-ref-E8.png",
                         "path":  "./assets/Beams=B/B-120-ref-E8.png"
@@ -1785,12 +2025,11 @@
                     {
                         "name":  "B-155-ref-E8.png",
                         "path":  "./assets/Beams=B/B-155-ref-E8.png"
-                    },
+                    },                    
                     {
                         "name":  "B-156-ref-E3-E7.png",
                         "path":  "./assets/Beams=B/B-156-ref-E3-E7.png"
-                    },
-                
+                    },                
                     {
                         "name":  "B-167.png",
                         "path":  "./assets/Beams=B/B-167.png"
@@ -1954,14 +2193,10 @@
                     }
                     ],
     "c-channel=c":  [
-                        {
-                            "name":  "c-86 (2).png",
-                            "path":  "./assets/c-channel=c/c-86 (2).png"
-                        },
-                        {
-                            "name":  "c-86.png",
-                            "path":  "./assets/c-channel=c/c-86.png"
-                        }
+                    {
+                        "name":  "c-86 (2).png",
+                        "path":  "./assets/c-channel=c/c-86 (2).png"
+                    }
                     ],
     "sag-rods=R":  [
                        {
@@ -2217,28 +2452,20 @@
                                             "path":  "./assets/E=details-E1-thru-E11/E-4.png"
                                         },
                                         {
-                                            "name":  "E-5-detail-1.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-5-detail-1.png"
+                                            "name":  "E-5-RF-d1-lines-2.4,-3,-3.1,-4-C-B.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-5-d1-lines-2.4,-3,-3.1,-4-C-B.png"
                                         },
                                         {
-                                            "name":  "E-5-detail-2.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-5-detail-2.png"
+                                            "name":  "E-5-RF-d2-lines-2.4,-3,-3.1,-4-A.3,-A.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-5-d2--2.4,-3,-3.1,-4-A.3,-A.png"
                                         },
                                         {
-                                            "name":  "E-5-detail-3.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-5-detail-3.png"
+                                            "name":  "E-5-RF-d3-lines-1,-1.7,-2,-A,-A.3-A.3,-A.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-5-d3-lines-1,-1.7,-2,-A,-A.3.png"
                                         },
                                         {
-                                            "name":  "E-5-detail-4.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-5-detail-4.png"
-                                        },
-                                        {
-                                            "name":  "E-5-detail-5.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-5-detail-5.png"
-                                        },
-                                        {
-                                            "name":  "E-5-detail-roof-framing.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-5-detail-roof-framing.png"
+                                            "name":  "E-5-d4-lines-1,-1.7,-2,-C,-B.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-5-d4-lines-1,-1.7,-2,-C,-B.png"
                                         },
                                         {
                                             "name":  "E-5.png",
@@ -2285,72 +2512,100 @@
                                             "path":  "./assets/E=details-E1-thru-E11/E-6.png"
                                         },
                                         {
-                                            "name":  "E-7-detail-1.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-7-detail-1.png"
+                                            "name":  "E-7-CL-C-d1-elevation-@line-1,-2,-2.4,-looking-East.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-7-CL-C-d1-elevation-@line-1,-2,-2.4,-looking-East.png"
                                         },
                                         {
-                                            "name":  "E-7-detail-2.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-7-detail-2.png"
+                                            "name":  "E-7-CL-C-d2-elevation-@line-1,-2,-2.4,-looking-East.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-7-CL-C-d2-elevation-@line-1,-2,-2.4,-looking-East.png"
                                         },
                                         {
-                                            "name":  "E-7-detail-3.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-7-detail-3.png"
+                                            "name":  "E-7-CL-C-d3-elevation-@line-1,-2,-2.4,-looking-East.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-7-CL-C-d3-elevation-@line-1,-2,-2.4,-looking-East.png"
                                         },
                                         {
-                                            "name":  "E-7-detail-4.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-7-detail-4.png"
+                                            "name":  "E-7-CL-C-d4-elevation-@line-1,-2,-2.4,-looking-East.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-7-CL-C-d4-elevation-@line-1,-2,-2.4,-looking-East.png"
                                         },
                                         {
-                                            "name":  "E-7-detail-5.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-7-detail-5.png"
+                                            "name":  "E-7-CL-C-d5-elevation-@line-2.4,-3.1,-4,-looking-East.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-7-CL-C-d5-elevation-@line-2.4,-3.1,-4,-looking-East.png"
                                         },
                                         {
-                                            "name":  "E-7-detail-6.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-7-detail-6.png"
+                                            "name":  "E-7-CL-C-d6-elevation-@line-2.4,-3.1,-4,-looking-East.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-7-CL-C-d6-elevation-@line-2.4,-3.1,-4,-looking-East.png"
+                                        },
+                                        {
+                                            "name":  "E-7-CL-C-d7-elevation-@line-2.4,-3.1,-4,-looking-East.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-7-CL-C-d7-elevation-@line-2.4,-3.1,-4,-looking-East.png"
+                                        },
+                                        {
+                                            "name":  "E-7-CL-C-d8-elevation-@line-2.4,-3.1,-4,-looking-East.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-7-CL-C-d8-elevation-@line-2.4,-3.1,-4,-looking-East.png"
                                         },
                                         {
                                             "name":  "E-7.png",
                                             "path":  "./assets/E=details-E1-thru-E11/E-7.png"
                                         },
                                         {
-                                            "name":  "E-8-detail-1.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-8-detail-1.png"
+                                            "name":  "E-8-CL-1-d1-elevation-@line-A.3-looking-North.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-8-CL-1-d1-elevation-@line-A.3-looking-North.png"
                                         },
                                         {
-                                            "name":  "E-8-detail-2.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-8-detail-2.png"
+                                            "name":  "E-8-CL-1-d2-elevation-@line-A.3,-B,-C-looking-North.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-8-CL-1-d2-elevation-@line-A.3,-B,-C-looking-North.png"
                                         },
                                         {
-                                            "name":  "E-8-detail-3.png",
-                                            "path":  "./assets/E=etails-E1-thru-E11/E-8-detail-3.png"
+                                            "name":  "E-8-CL-1-d3-elevation-@line-A.3-B-C-looking-North.png",
+                                            "path":  "./assets/E=etails-E1-thru-E11/E-8-CL-1-d3-elevation-@line-A.3-B-C-looking-North.png"
                                         },
                                         {
-                                            "name":  "E-8-detail-4.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-8-detail-4.png"
+                                            "name":  "E-8-CL-1-d4-elevation-@line-A.3,-B,-C-looking-North.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-8-CL-1-d4-elevation-@line-A.3,-B,-C-looking-North.png"
                                         },
                                         {
-                                            "name":  "E-8-detail-5.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-8-detail-5.png"
+                                            "name":  "E-8-CL-1-d5-elevation-@line-A,-A.3,-B,-C-looking-North.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-8-CL-1-d5-elevation-@line-A,-A.3,-B,-C-looking-North.png"
                                         },
                                         {
                                             "name":  "E-8.png",
                                             "path":  "./assets/E=details-E1-thru-E11/E-8.png"
                                         },
                                         {
-                                            "name":  "E-9-detail-1.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-9-detail-1.png"
+                                            "name":  "E-9-CL-4-d1-elevation-@line-C,-B,-A.3-looking-South.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-9-CL-4-d1-elevation-@line-C,-B,-A.3-looking-South.png"
                                         },
                                         {
-                                            "name":  "E-9-detail-2.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-9-detail-2.png"
+                                            "name":  "E-9-CL-4-d2-elevation-@line-C,-B,-A.3-looking-South.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-9-CL-4-d2-elevation-@line-C,-B,-A.3-looking-South.png"
                                         },
                                         {
-                                            "name":  "E-9-detail-3.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-9-detail-3.png"
+                                            "name":  "E-9-CL-4-d3-elevation-@line-C,-B,-A.3-looking-South.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-9-CL-4-d3-elevation-@line-C,-B,-A.3-looking-South.png"
                                         },
                                         {
-                                            "name":  "E-9.png",
-                                            "path":  "./assets/E=details-E1-thru-E11/E-9.png"
+                                            "name":  "E-9-CL-4-d4-elevation-@line-C,-B,-A.3-looking-South.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-9-CL-4-d4-elevation-@line-C,-B,-A.3-looking-South.png"
+                                        },
+                                        {
+                                            "name":  "E-9-CL-4-d5-elevation-@line-B,-A.3,-A-looking-South.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-9-CL-4-d5-elevation-@line-B,-A.3,-A-looking-South.png"
+                                        },
+                                        {
+                                            "name":  "E-9-CL-4-d6-elevation-@line-B,-A.3,-A-looking-South.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-9-CL-4-d6-elevation-@line-B,-A.3,-A-looking-South.png"
+                                        },
+                                        {
+                                            "name":  "E-9-CL-4-d7-elevation-@line-C,-B,-A.3-looking-South.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-9-CL-4-d7-elevation-@line-B,-A.3,-A-looking-South.png"
+                                        },
+                                        {
+                                            "name":  "E-9-CL-4-d8-elevation-@line-B,-A.3,-A-looking-South.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-9-CL-4-d8-elevation-@line-B,-A.3,-A-looking-South.png"
+                                        },
+                                        {
+                                            "name":  "E-9-CL-4-d8-elevation-@line-B,-A.3,-A-looking-South.png",
+                                            "path":  "./assets/E=details-E1-thru-E11/E-9-CL-4-d8-elevation-@line-B,-A.3,-A-looking-South.png"
                                         },
                                         {
                                             "name":  "E-10-detail-1.png",

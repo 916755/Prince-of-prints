@@ -5,44 +5,284 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Prince of Prints</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+  /* Force bigger controls – no other changes required */
+  select, input, button {
+    font-size: 18px !important;
+    padding: 14px 16px !important;
+    min-height: 44px !important;
+    border-radius: 12px !important;
+  }
+</style>
+
 </head>
 <body>
   <header class="app-header">
     <h1>Prince of Prints</h1>
     <p class="tagline">Fast blueprint browsing • Keyboard-ready • Zero setup</p>
   </header>
+<main class="container">
+  <section class="controls">
+    <!-- Job picker -->
+    <div class="control-group">
+      <label for="job-input">Access code:</label>
+      <input id="job-input" type="password" placeholder="Enter access code (e.g. 24-36N)">
+    </div>
 
-  <main class="container">
-    <section class="controls">
-      <div class="control">
-        <label for="category-select">Category</label>
-        <select id="category-select"></select>
-      </div>
-      <div class="control">
-        <label for="sheet-select">Sheet</label>
-        <select id="sheet-select"></select>
-      </div>
-      <div class="control grow">
-        <label for="filter-input">Filter (type to narrow)</label>
-        <input id="filter-input" type="text" placeholder="e.g. B-232, ref-E8, detail, C-12">
-      </div>
-      <div class="control buttons">
-        <button id="prev-btn" title="Previous (←)">Prev</button>
-        <button id="next-btn" title="Next (→)">Next</button>
-      </div>
-    </section>
+    <!-- Category -->
+    <div class="control">
+      <label for="category-select">Category</label>
+      <select id="category-select"></select>
+    </div>
 
-    <section class="viewer">
-      <div id="image-wrapper">
-        <img id="image" alt="Blueprint page">
-      </div>
-    </section>
-  </main>
+    <!-- Sheet -->
+    <div class="control">
+      <label for="sheet-select">Sheet</label>
+      <select id="sheet-select"></select>
+    </div>
 
+    <!-- Filter -->
+    <div class="control grow">
+      <label for="filter-input">Filter (type to narrow)</label>
+      <input id="filter-input" type="text" placeholder="e.g. B-232, ref-E8, detail, C-12">
+    </div>
+
+    <!-- Nav buttons -->
+    <div class="control buttons">
+      <button id="prev-btn" title="Previous (←)">Prev</button>
+      <button id="next-btn" title="Next (→)">Next</button>
+    </div>
+  </section>
+
+  <section class="viewer">
+    <div id="image-wrapper">
+      <img id="image" alt="Blueprint page">
+    </div>
+  </section>
+</main>
   <footer class="app-footer">
     <span id="status-text">Ready.</span>
   </footer>
+<script src="./script.js?v=pop-3"></script>
+<script>
+/* Fallback runtime: runs even if script.js doesn't */
+(function () {
+  const els = {
+    jobInput: document.getElementById('job-input'),
+    categorySelect: document.getElementById('category-select'),
+    sheetSelect: document.getElementById('sheet-select'),
+    filterInput: document.getElementById('filter-input'),
+    image: document.getElementById('image'),
+    status: document.getElementById('status-text'),
+  };
 
-  <script src="script.js"></script>
-</body>
-</html>
+  function setStatus(msg){ if (els.status) els.status.textContent = msg; }
+  window.setStatus = setStatus;
+
+  function makeOptions(list, first='Select...'){
+    const o = [`<option value="">${first}</option>`];
+    for (const it of list) {
+      if (typeof it === 'string') o.push(`<option value="${it}">${it}</option>`);
+      else if (it && typeof it === 'object') o.push(`<option value="${it.value ?? it.name ?? ''}">${it.label ?? it.name ?? it.value ?? ''}</option>`);
+    }
+    return o.join('');
+  }
+
+  // Group by folder if present; else derive from filename prefix (B-, C-, E-, …)
+function group(items){
+  // Customize this with your 13 categories as needed:
+  const labelMap = {
+    B: 'Beams',
+    C: 'Columns',
+    D: 'Details',
+    E: 'Erection',
+    S: 'Schedules',
+    P: 'Plans',
+    // Examples of multi-letter prefixes:
+    PL: 'Plates',
+    ST: 'Stairs',
+    JO: 'Joists',
+    FD: 'Foundations',
+    EL: 'Elevations',
+    GN: 'General Notes',
+    MS: 'Misc Steel',
+    // Anything not listed will show as its prefix (e.g., "AB")
+  };
+
+  const out = { All: [] };
+
+  for (const it of items) {
+    const raw = String(it.path || '').replace(/^\.\//, '');
+    const segs = raw.split('/');
+
+    let cat;
+
+    // 1) Prefer folder category (images/<Category>/... or assets/<Category>/...)
+    const iImages = segs.findIndex(s => s.toLowerCase() === 'images');
+    if (iImages !== -1 && segs[iImages + 1] && segs.length > iImages + 2) {
+      cat = segs[iImages + 1];
+    } else if (segs[0] === 'assets' && segs[1] && segs.length > 2) {
+      cat = segs[1];
+    } else {
+      // 2) Derive from filename/label prefix (letters up to - or _), e.g. "PL-01" => "PL"
+      const base = (it.label || it.name || segs.at(-1) || '');
+      const m = base.match(/^([A-Za-z]+)[-_]/);
+      const prefix = m ? m[1].toUpperCase() : '';
+      cat = labelMap[prefix] || prefix || 'Misc';
+    }
+
+    const norm = {
+      name: it.name || it.label || segs.at(-1) || 'item',
+      label: it.label || it.name || it.path,
+      path: it.path,
+    };
+
+    (out[cat] ||= []).push(norm);
+    out.All.push(norm);
+  }
+
+  return out;
+}
+  function buildSrc(jobId, it){
+    const rel = String(it.path || '').replace(/^\.?\/*/, '').replace(/^jobs\/[^/]+\//i, '');
+    return rel.includes('/') ? `jobs/${jobId}/${rel}` : `jobs/${jobId}/images/${rel}`;
+  }
+
+  // Access code -> job folders
+  window.applyAccessCode = function(){
+    const accessCode = (els.jobInput?.value || '').trim();
+    if (!accessCode){ window.currentJob = null; setStatus('No access code entered.'); return; }
+    window.currentJob = {
+      id: accessCode,
+      label: accessCode,
+      indexUrl: `jobs/${accessCode}/index/assets-index.json`,
+      imagesDir: `jobs/${accessCode}/images/`,
+      thumbsDir: `jobs/${accessCode}/thumbs/`,
+    };
+    setStatus(`Access code set: ${accessCode}`);
+  };
+  // keep old listeners working
+  window.applyJobNumber = window.applyAccessCode;
+
+  window.loadIndexForCurrentJob = async function(){
+    if (!window.currentJob?.indexUrl){ setStatus('No access code set.'); return; }
+    try {
+      setStatus('Loading index…');
+      const res = await fetch(window.currentJob.indexUrl, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const raw = await res.json();
+      const arr = Array.isArray(raw) ? raw : Object.values(raw || {}).flat();
+      if (!arr.length){ setStatus('No items in index.'); return; }
+
+      const groups = group(arr);
+      window.currentIndex = groups;
+
+      // fill categories
+     let cats = Object.keys(groups);
+// Put "All" at the top if present
+cats = cats.sort((a,b) => (a==='All' ? -1 : b==='All' ? 1 : a.localeCompare(b)));
+
+if (els.categorySelect) {
+  els.categorySelect.innerHTML = makeOptions(
+    cats.map(c => ({ value: c, label: `${c} (${(groups[c]||[]).length})` })),
+    'Select a category'
+  );
+  els.categorySelect.value = cats.includes('All') ? 'All' : (cats[0] || '');
+}
+
+
+      // view state
+      window._allItems = arr; // keep full list
+      window._items = groups[els.categorySelect.value] || arr;
+      window._pos = 0;
+
+      // fill sheets for current category
+      if (els.sheetSelect) {
+        els.sheetSelect.innerHTML = makeOptions(
+          window._items.map(x => ({ value: x.path, label: x.label || x.name || x.path })),
+          'Select a sheet'
+        );
+      }
+
+      // show helper
+      window._show = function(i){
+        window._pos = Math.max(0, Math.min(i, window._items.length - 1));
+        const it = window._items[window._pos];
+        els.image.src = buildSrc(window.currentJob.id, it);
+        setStatus(`Showing: ${it.label || it.name || it.path} (${window._pos + 1}/${window._items.length})`);
+        if (els.sheetSelect) els.sheetSelect.value = it.path;
+      };
+
+      // wire once
+      if (!window._wired){
+        window._wired = true;
+
+        if (els.categorySelect) {
+          els.categorySelect.addEventListener('change', () => {
+            window._items = groups[els.categorySelect.value] || [];
+            // reapply filter text if any
+            if (els.filterInput?.value) {
+              const q = els.filterInput.value.toLowerCase();
+              window._items = window._items.filter(it => (`${it.name||''} ${it.label||''} ${it.path||''}`).toLowerCase().includes(q));
+            }
+            if (els.sheetSelect) {
+              els.sheetSelect.innerHTML = makeOptions(
+                window._items.map(x => ({ value: x.path, label: x.label || x.name || x.path })),
+                'Select a sheet'
+              );
+            }
+            if (window._items.length) _show(0); else { els.image.removeAttribute('src'); setStatus('No matches.'); }
+          });
+        }
+
+        if (els.sheetSelect) {
+          els.sheetSelect.addEventListener('change', () => {
+            const i = window._items.findIndex(it => it.path === els.sheetSelect.value);
+            if (i >= 0) _show(i);
+          });
+        }
+
+        if (els.filterInput) {
+          els.filterInput.addEventListener('input', () => {
+            const q = (els.filterInput.value || '').toLowerCase();
+            const base = groups[els.categorySelect.value] || [];
+            window._items = q ? base.filter(it => (`${it.name||''} ${it.label||''} ${it.path||''}`).toLowerCase().includes(q)) : base;
+            if (els.sheetSelect) {
+              els.sheetSelect.innerHTML = makeOptions(
+                window._items.map(x => ({ value: x.path, label: x.label || x.name || x.path })),
+                'Select a sheet'
+              );
+            }
+            if (window._items.length) _show(0); else { els.image.removeAttribute('src'); setStatus('No matches.'); }
+          });
+        }
+
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        if (prevBtn) prevBtn.addEventListener('click', () => _show(window._pos - 1));
+        if (nextBtn) nextBtn.addEventListener('click', () => _show(window._pos + 1));
+
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft')  _show(window._pos - 1);
+          if (e.key === 'ArrowRight') _show(window._pos + 1);
+        });
+      }
+
+      // first display
+      if (window._items.length) _show(0);
+      setStatus(`Index loaded. ${Object.keys(groups).length} categor${Object.keys(groups).length===1?'y':'ies'} found.`);
+    } catch (err) {
+      console.error(err);
+      setStatus(`Failed to load assets-index.json — ${err.message}`);
+    }
+  };
+
+  // Input wiring
+  document.addEventListener('DOMContentLoaded', () => {
+    if (els.jobInput) {
+      els.jobInput.addEventListener('change', async () => { applyAccessCode(); await loadIndexForCurrentJob(); });
+      els.jobInput.addEventListener('keyup', async (e) => { if (e.key === 'Enter') { applyAccessCode(); await loadIndexForCurrentJob(); } });
+    }
+  });
+})();
+</script>
