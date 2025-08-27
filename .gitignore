@@ -140,3 +140,6 @@ vite.config.ts.timestamp-*
 # Project-specific
 backups/
 .vscode/
+# Ignore generated image folders in future commits
+jobs/**/images/
+jobs/**/thumbs/

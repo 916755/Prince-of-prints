@@ -1,4 +1,3 @@
-
 :root {
   --bg: #0f172a;
   --panel: #111827;
@@ -17,118 +16,198 @@ body {
   color: var(--text);
 }
 
+/* Header/Footer */
 .app-header, .app-footer {
   padding: 12px 16px;
   background: linear-gradient(180deg, #0b1220, #0b1220d0);
   border-bottom: 1px solid #1f2937;
 }
+.app-footer { border-top: 1px solid #1f2937; }
 .app-header h1 { margin: 0; font-size: 22px; letter-spacing: 0.5px; }
 .tagline { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+#status-text { color: var(--muted); font-size: 12px; }
 
-.container {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  display: grid;
-  gap: 12px;
-  grid-template-rows: auto 1fr;
-  height: calc(100vh - 108px);
+/* Main column centered */
+main.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  box-sizing: border-box;
 }
 
-.controls {
-  display: grid;
-  grid-template-columns: 200px 1fr 2fr auto;
-  gap: 10px;
-  align-items: end;
+/* Steps */
+.step {
+  display: none;
+  width: 100%;
+  max-width: 720px;
+  margin: 24px auto;
+}
+.step.active { display: block; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  border: 0;
 }
 
-.control { display: grid; gap: 6px; }
-.control.grow { grid-column: span 1; }
+/* Controls */
+.control { display: grid; gap: 6px; margin: 12px 0; }
 .control label { font-size: 12px; color: var(--muted); }
 select, input, button {
   background: #0b1220;
   color: var(--text);
   border: 1px solid #253041;
   border-radius: 12px;
-  padding: 14px 16px;   /* bigger */
-  font-size: 16px;      /* was ~14px */
-  min-height: 40px;     /* ensures readable/tappable size */
+  padding: 12px 14px;
+  font-size: 16px;
   outline: none;
 }
-
 select:focus, input:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 4px var(--ring);
 }
-.buttons { display: flex; gap: 8px; justify-content: flex-end; }
-button:hover { border-color: var(--accent); cursor: pointer; }
 
+/* Step nav */
+.step-nav {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 24px;
+}
+.step-nav .back-btn,
+.step-nav .next-btn {
+  padding: 12px 16px;
+  min-height: 44px;
+  border-radius: 12px;
+  border: 1px solid #253041;
+  background: #0b1220;
+  color: #e5e7eb;
+  font-size: 16px;
+  font-weight: 600;
+}
+.step-nav .back-btn:hover,
+.step-nav .next-btn:hover { border-color: var(--accent); }
+button[disabled]{ opacity:.55; cursor:not-allowed; }
+
+/* Viewer */
 .viewer {
   background: #0b1220;
   border: 1px solid #1f2937;
   border-radius: 14px;
   padding: 10px;
   display: grid;
-  grid-template-rows: 1fr;
+  grid-template-rows: 1fr auto;
   min-height: 0;
 }
-
 #image-wrapper {
   overflow: auto;
   width: 100%;
-  height: 100%;
+  height: 70vh;      /* big, centered viewport */
   display: grid;
-  align-items: start;     /* top edge */
-  justify-items: center;  /* keep it centered left/right (use 'start' for top-left) */
+  align-items: start;
+  justify-items: center;
 }
-
-
-
-/* Make the image base-size fill the viewer width */
 #image {
   width: 100%;
   height: auto;
-  max-width: none;   /* allow transform zoom beyond wrapper */
+  max-width: none;
   max-height: none;
   border-radius: 8px;
   image-rendering: auto;
+  touch-action: none; user-select: none; -webkit-user-drag: none;
 }
 
+/* Buttons row under viewer */
+.control.buttons { display: flex; gap: 8px; justify-content: flex-end; }
 
-.app-footer {
+/* Mobile */
+@media (max-width: 900px) {
+  .step { margin: 12px auto; }
+}
+/* === HARD CENTER (grid) — last lines win === */
+
+/* Neutralize older container rules that might fight centering */
+main.container {
+  max-width: none !important;
+  width: auto !important;
+  margin: 0 !important;
+}
+
+/* Put the whole page in a 3-column grid:
+   [ gutter | centered column | gutter ]  */
+body {
+  margin: 0 !important;
+  display: grid !important;
+  grid-template-columns: 1fr min(1100px, 100%) 1fr !important;
+}
+
+/* Force header, main, footer into the centered column */
+body > header.app-header,
+body > main.container,
+body > footer.app-footer {
+  grid-column: 2 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+}
+
+/* Keep each step panel centered within that column */
+.step {
+  max-width: 720px !important;
+  width: 100% !important;
+  margin: 24px auto !important;
+}
+.page {
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+.step {
+  max-width: 720px;
+  width: 100%;
+  margin: 24px auto;
+}
+
+/* Optional visual guide to confirm centering */
+.page {
+  outline: 2px dashed rgba(34,211,238,.35);
+  outline-offset: 0;
+}
+/* === SINGLE CENTER COLUMN (final) === */
+:root { --page-pad: 24px; --page-max: 1100px; }
+
+body > .page {
+  width: min(var(--page-max), 100% - (2 * var(--page-pad)));
+  margin-inline: auto;          /* centers header+main+footer as a unit */
+  padding-inline: var(--page-pad);
+  box-sizing: border-box;
+}
+
+.step { max-width: 720px; width: 100%; margin: 24px auto; }
+#image-wrapper {
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 8px;
-  border-top: 1px solid #1f2937;
-}
-#status-text { color: var(--muted); font-size: 12px; }
-
-@media (max-width: 900px) {
-  .controls { grid-template-columns: 1fr; }
-}
-/* Touch comfort */
-@media (max-width: 900px) {
-  .controls { grid-template-columns: 1fr; }
-  .buttons button { padding: 14px 18px; font-size: 16px; }
-  select, input { padding: 14px 12px; font-size: 16px; }
+  padding: 8px;
 }
 
-/* Prevent long-press selection & ghost drag on images */
-#image { touch-action: none; user-select: none; -webkit-user-drag: none; }
-#image-wrapper { touch-action: none; }
-/* ===== Compact-friendly layout (auto-sizes viewer) ===== */
-html, body { height: 100%; }
-body { display: flex; flex-direction: column; }
-
-/* Let the main grid fill leftover space automatically */
-.container { flex: 1; min-height: 0; display: grid; grid-template-rows: auto 1fr; }
-
-/* --- Compact mode overrides (toggle via body.compact) --- */
-body.compact .app-header { padding: 6px 10px; }
-body.compact .app-header h1 { font-size: 16px; }
-body.compact .tagline { display: none; }            /* hide subheading */
-body.compact .controls { gap: 6px; }
-body.compact select,
-body.compact input,
-body.compact button { padding: 6px 8px; font-size: 14px; border-radius: 8px; }
-body.compact .viewer { padding: 6px; }
-body.compact .app-footer { padding: 6px 10px; }
+#image {
+  max-width: 90vw;
+  max-height: 75vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+/* kill accidental page grid so content centers inside .container */
+body { 
+  display: block !important; 
+  margin: 0;
+}
