@@ -120,46 +120,54 @@ function makeOptions(list, first='Select...'){
   return o.join('');
 }
 
-function group(items){
-  const labelMap = {
-    B: 'Beams', C: 'Columns', D: 'Details', E: 'Erection',
-    S: 'Schedules', P: 'Plans', PL: 'Plates', ST: 'Stairs',
-    JO: 'Joists', FD: 'Foundations', EL: 'Elevations',
-    GN: 'General Notes', MS: 'Misc Steel',
-  };
+// Natural sort by label/name (e.g., D-2 before D-10) — keeps your labels
+function naturalByLabel(a, b) {
+  const pick = (x) => (x?.label ?? x?.name ?? x?.tag ?? x?.path ?? '').toString();
+  return pick(a).localeCompare(pick(b), undefined, { numeric: true, sensitivity: 'base' });
+}
+
+// Group items WITHOUT changing your category labels
+function group(items) {
   const out = { All: [] };
+
   for (const it of items) {
-    const raw = String(it.path || it.image || '').replace(/^\.\//, '');
-    const segs = raw.split('/');
-    let cat;
-    const iImages = segs.findIndex(s => s.toLowerCase() === 'images');
-    if (iImages !== -1 && segs[iImages + 1] && segs.length > iImages + 2) {
-      cat = segs[iImages + 1];
-    } else if (segs[0] === 'assets' && segs[1] && segs.length > 2) {
-      cat = segs[1];
-    } else {
+    const rawPath = String(it.path || it.image || it.file || '').replace(/^\.\//, '');
+    const segs = rawPath.split('/');
+
+    // Prefer folder category: .../(images|assets)/<Category>/<file>
+    let cat = '';
+    for (const marker of ['images', 'assets']) {
+      const idx = segs.findIndex(s => s.toLowerCase() === marker);
+      if (idx !== -1 && segs[idx + 1] && segs.length > idx + 2) {
+        cat = segs[idx + 1]; // use folder name AS-IS
+        break;
+      }
+    }
+
+    // Fallback: filename prefix as-is (e.g., D-12 -> "D")
+    if (!cat) {
       const base = (it.label || it.name || segs.at(-1) || '');
       const m = base.match(/^([A-Za-z]+)[-_]/);
-      const prefix = m ? m[1].toUpperCase() : '';
-      cat = labelMap[prefix] || prefix || 'Misc';
+      cat = m ? m[1] : 'Misc';
     }
+
     const norm = {
-      name: it.name || it.label || segs.at(-1) || 'item',
-      label: it.label || it.name || it.image || it.path,
-      path: it.image || it.path || it.file,
+      name:  it.name  || it.label || segs.at(-1) || 'item',
+      label: it.label || it.name  || rawPath,
+      path:  it.image || it.path  || it.file     || rawPath,
       thumb: it.thumb || it.thumbnail || it.thumbPath
     };
+
     (out[cat] ||= []).push(norm);
     out.All.push(norm);
   }
+
   return out;
 }
-
 // ---- Load index for current job ----
 async function loadIndexForCurrentJob(){
   if (!window.currentJob?.indexUrl){ setStatus('No access code set.'); return; }
   setStatus('Loading index…');
-
   try {
     const res = await fetch(window.currentJob.indexUrl, { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -167,8 +175,15 @@ async function loadIndexForCurrentJob(){
     const arr = Array.isArray(raw) ? raw : Object.values(raw || {}).flat();
     if (!arr.length){ setStatus('No items in index.'); return; }
 
-    const groups = group(arr);
-    window.currentIndex = groups;
+  const groups = group(arr);
+
+// Sort every category (including "All") by label using natural order
+Object.keys(groups).forEach(k => {
+  groups[k] = (groups[k] || []).slice().sort(naturalByLabel);
+});
+
+// Now publish the **sorted** index
+window.currentIndex = groups;
 
     // Fill categories (move "All" to end)
     const cats = Object.keys(groups).sort((a, b) => {
@@ -366,85 +381,3 @@ document.addEventListener('click', (e) => {
   const next = document.getElementById(`step-${n}`);
   if (next) next.classList.add('active');
 });
-// ==== Touch gestures for Step 4 (pinch, pan, swipe, double-tap) ====
-(() => {
-  const wrap = document.getElementById('image-wrapper');
-  const img  = document.getElementById('image');
-  if (!wrap || !img) return;
-
-  // touch-friendly defaults
-  wrap.style.touchAction = 'none';
-  img.style.transformOrigin = '0 0';
-  img.style.userSelect = 'none'; img.style.webkitUserDrag = 'none';
-
-  let scale = 1, x = 0, y = 0;
-  const MIN = 1, MAX = 5;
-
-  let panStartX = 0, panStartY = 0, panning = false;
-  let pinchStartDist = 0, pinchStartScale = 1;
-  let swipeStartX = 0, swipeStartTime = 0;
-  let lastTap = 0;
-
-  const apply = () => (img.style.transform = `translate3d(${x}px,${y}px,0) scale(${scale})`);
-  const reset = () => { scale = 1; x = 0; y = 0; apply(); };
-
-  // double-tap zoom toggle
-  const dblTap = () => { scale = scale > 1 ? 1 : 2.5; x = 0; y = 0; apply(); };
-
-  wrap.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      const t = e.touches[0], now = Date.now();
-      if (now - lastTap < 300) dblTap();
-      lastTap = now;
-
-      panStartX = t.clientX - x;
-      panStartY = t.clientY - y;
-      panning = scale > 1;
-
-      swipeStartX = t.clientX;
-      swipeStartTime = now;
-    } else if (e.touches.length === 2) {
-      const [a, b] = e.touches;
-      pinchStartDist = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
-      pinchStartScale = scale;
-    }
-  }, { passive: true });
-
-  wrap.addEventListener('touchmove', (e) => {
-    if (e.touches.length === 2) {
-      e.preventDefault();
-      const [a, b] = e.touches;
-      const d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
-      scale = Math.min(MAX, Math.max(MIN, pinchStartScale * (d / pinchStartDist)));
-      apply();
-    } else if (e.touches.length === 1 && panning) {
-      e.preventDefault();
-      const t = e.touches[0];
-      x = t.clientX - panStartX;
-      y = t.clientY - panStartY;
-      apply();
-    }
-  }, { passive: false });
-
-  wrap.addEventListener('touchend', (e) => {
-    // swipe to prev/next only when not zoomed
-    if (scale === 1 && e.touches.length === 0) {
-      const dx = (e.changedTouches[0]?.clientX ?? swipeStartX) - swipeStartX;
-      const dt = Date.now() - swipeStartTime;
-      if (Math.abs(dx) > 60 && dt < 500) {
-        window._show?.(window._pos + (dx < 0 ? 1 : -1));
-      }
-    }
-  });
-
-  // wheel zoom on laptops
-  wrap.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    scale = Math.min(MAX, Math.max(MIN, scale + (e.deltaY < 0 ? 0.15 : -0.15)));
-    apply();
-  }, { passive: false });
-
-  // reset zoom whenever a new image is shown
-  const orig = window._show;
-  window._show = function(i){ reset(); orig?.call(window, i); };
-})();
